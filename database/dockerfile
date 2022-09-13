@@ -1,0 +1,12 @@
+# docker build -t go-database .
+# docker run -it --rm -p 5432:5432 --name go-database go-database
+
+FROM postgres:latest
+
+ENV POSTGRES_PASSWORD=password
+ENV POSTGRES_USER=postgres
+ENV POSTGRES_DB=database
+
+WORKDIR /app
+
+EXPOSE 5432 5432

@@ -7,5 +7,4 @@ import (
 type Repository interface {
 	Migrate() error
 	Create(account Account, wallet wallet.MockWalletReturn) (*Account, error)
-	GetByName(name string) (*Account, error)
 }

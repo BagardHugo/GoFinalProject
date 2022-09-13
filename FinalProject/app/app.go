@@ -17,7 +17,8 @@ var accountRepository *account.PostgreSqlRepository
 
 func HandleCreateAccount(w http.ResponseWriter, r *http.Request) {
 
-	db, err := sql.Open("pgx", "postgres://postgres:password@localhost:5432/postgres")
+	db, err := sql.Open("pgx", "host=localhost port=5432 user=postgres password=password dbname=database sslmode=disable")
+
 	if err != nil {
 		log.Fatal(err)
 		fmt.Println("Open db fail")
@@ -26,13 +27,13 @@ func HandleCreateAccount(w http.ResponseWriter, r *http.Request) {
 
 	accountRepository = account.NewPostgreSqlRepository(db)
 	if err := accountRepository.Migrate(); err != nil {
-		log.Fatal(err)
+		log.Fatal(err.Error())
 	}
 
 	// Check method
 	err = utils.CheckHttpMethod("POST", w, r)
 	if err != nil {
-		log.Print(err)
+		log.Print(err.Error())
 		return
 	}
 
@@ -67,10 +68,23 @@ func HandleCreateAccount(w http.ResponseWriter, r *http.Request) {
 		utils.SendHttpError(http.StatusInternalServerError, w, err)
 	}
 
-	_, err = accountRepository.Create(account, wallet)
+	account, err = accountRepository.Create(account, wallet)
 	if errors.Is(err, constants.ErrDuplicate) {
 		fmt.Printf("record: %+v already exists\n", account)
 	} else if err != nil {
-		log.Fatal(err)
+		log.Fatal(err.Error())
+	}
+
+	accountJson, err := json.Marshal(account)
+	if err != nil {
+		utils.SendHttpError(http.StatusInternalServerError, w, err)
+		return
+	}
+
+	// Send successful response
+	w.WriteHeader(http.StatusOK)
+	_, err = w.Write(accountJson)
+	if err != nil {
+		log.Printf("Unable to write response : %s", err)
 	}
 }

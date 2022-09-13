@@ -47,8 +47,8 @@ func (r *PostgreSqlRepository) Migrate() error {
 	return err
 }
 
-func (r *PostgreSqlRepository) Create(account Account, wallet wallet.MockWalletReturn) (*Account, error) {
-	var id int64
+func (r *PostgreSqlRepository) Create(account Account, wallet wallet.MockWalletReturn) (Account, error) {
+	var id int
 	var query = `INSERT INTO accounts(userName, password, pinCode) values($1, $2, $3) RETURNING id`
 
 	err := r.db.QueryRow(query, account.UserName, account.Password, account.PinCode).Scan(&id)
@@ -57,37 +57,26 @@ func (r *PostgreSqlRepository) Create(account Account, wallet wallet.MockWalletR
 		var pgxError *pgconn.PgError
 		if errors.As(err, &pgxError) {
 			if pgxError.Code == "23505" {
-				return nil, constants.ErrDuplicate
+				return Account{}, constants.ErrDuplicate
 			}
 		}
-		return nil, err
+		return Account{}, err
 	}
 	account.Id = id
 
 	// Create wallet with account id
-	r.LinkWallet(int(account.Id), wallet)
+	wallet, _ = r.LinkWallet(account.Id, wallet)
+	account.Wallet = wallet
 
-	return &account, nil
+	return account, nil
 }
 
-func (r *PostgreSqlRepository) GetByName(userName string) (*Account, error) {
-	row := r.db.QueryRow(
-		"SELECT * FROM accounts WHERE userName = $1",
-		userName)
+func (r *PostgreSqlRepository) LinkWallet(accountId int, wallet wallet.MockWalletReturn) (wallet.MockWalletReturn, error) {
+	var id int
 
-	var account Account
-	if err := row.Scan(&account.Id, &account.UserName, &account.Password, &account.PinCode); err != nil {
-		if errors.Is(err, sql.ErrNoRows) {
-			return nil, nil
-		}
-		return nil, err
-	}
-	return &account, nil
-}
-
-func (r *PostgreSqlRepository) LinkWallet(accountId int, wallet wallet.MockWalletReturn) {
 	_ = r.db.QueryRow(
 		"insert into wallets(id_player, address) values ($1, $2)",
 		accountId,
-		wallet.WalletAddress)
+		wallet.WalletAddress).Scan(&id)
+	return wallet, nil
 }

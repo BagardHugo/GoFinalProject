@@ -13,6 +13,6 @@ type MockWalletReturn struct {
 }
 
 type Wallet struct {
-	ID      int    `json"id"`
+	Id      int    `json"id"`
 	Address string `json:"address"`
 }
