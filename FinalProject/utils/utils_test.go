@@ -1,6 +1,9 @@
 package utils
 
 import (
+	"bytes"
+	"net/http"
+	"net/http/httptest"
 	"testing"
 )
 
@@ -268,6 +271,100 @@ func Benchmark_checkPinCode(b *testing.B) {
 	for _, tt := range tests {
 		for i := 0; i < b.N; i++ {
 			checkPinCode(tt.args.pincode)
+		}
+	}
+}
+
+func TestCheckHttpMethod(t *testing.T) {
+	type args struct {
+		method string
+		w      http.ResponseWriter
+		r      *http.Request
+	}
+	var tests = []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{
+			name: "PATCH send POST",
+			args: args{
+				method: "PATCH",
+				w:      httptest.NewRecorder(),
+				r:      httptest.NewRequest(http.MethodPost, "http://localhost:5001/", bytes.NewBuffer([]byte{})),
+			},
+			wantErr: true,
+		},
+		{
+			name: "GET send POST",
+			args: args{
+				method: "GET",
+				w:      httptest.NewRecorder(),
+				r:      httptest.NewRequest(http.MethodPost, "http://localhost:5001/", bytes.NewBuffer([]byte{})),
+			},
+			wantErr: true,
+		},
+		{
+			name: "POST send POST",
+			args: args{
+				method: "POST",
+				w:      httptest.NewRecorder(),
+				r:      httptest.NewRequest(http.MethodPost, "http://localhost:5001/", bytes.NewBuffer([]byte{})),
+			},
+			wantErr: false,
+		},
+	}
+	for _, tt := range tests {
+		t.Run(tt.name, func(t *testing.T) {
+			if err := CheckHttpMethod(tt.args.method, tt.args.w, tt.args.r); (err != nil) != tt.wantErr {
+				t.Errorf("checkHttpMethod() error = %v, wantErr %v", err, tt.wantErr)
+			}
+		})
+	}
+}
+
+func Benchmark_CheckHttpMethod(b *testing.B) {
+	type args struct {
+		method string
+		w      http.ResponseWriter
+		r      *http.Request
+	}
+	var tests = []struct {
+		name    string
+		args    args
+		wantErr bool
+	}{
+		{
+			name: "PATCH send POST",
+			args: args{
+				method: "PATCH",
+				w:      httptest.NewRecorder(),
+				r:      httptest.NewRequest(http.MethodPost, "http://localhost:5001/", bytes.NewBuffer([]byte{})),
+			},
+			wantErr: true,
+		},
+		{
+			name: "GET send POST",
+			args: args{
+				method: "GET",
+				w:      httptest.NewRecorder(),
+				r:      httptest.NewRequest(http.MethodPost, "http://localhost:5001/", bytes.NewBuffer([]byte{})),
+			},
+			wantErr: true,
+		},
+		{
+			name: "POST send POST",
+			args: args{
+				method: "POST",
+				w:      httptest.NewRecorder(),
+				r:      httptest.NewRequest(http.MethodPost, "http://localhost:5001/", bytes.NewBuffer([]byte{})),
+			},
+			wantErr: false,
+		},
+	}
+	for _, tt := range tests {
+		for i := 0; i < b.N; i++ {
+			CheckHttpMethod(tt.args.method, tt.args.w, tt.args.r)
 		}
 	}
 }
