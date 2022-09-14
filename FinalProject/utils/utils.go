@@ -49,7 +49,7 @@ func CheckHttpMethod(method string, w http.ResponseWriter, r *http.Request) erro
 
 func CheckData(account account.Account, w http.ResponseWriter) error {
 	log.Print(account)
-	err := checkUserName(account.UserName)
+	err := CheckUserName(account.UserName)
 	if err != nil {
 		SendHttpError(http.StatusBadRequest, w, err)
 		return err
@@ -69,7 +69,7 @@ func CheckData(account account.Account, w http.ResponseWriter) error {
 	return nil
 }
 
-func checkUserName(userName string) error {
+func CheckUserName(userName string) error {
 	// Username naming policy
 	if !constants.RegexUsername.MatchString(userName) {
 		return errors.New(constants.USERNAME_FORMAT_ERROR)

@@ -46,7 +46,7 @@ func Test_checkUserName(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if err := checkUserName(tt.args.username); (err != nil) != tt.wantErr {
+			if err := CheckUserName(tt.args.username); (err != nil) != tt.wantErr {
 				t.Errorf("checkUsername() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
@@ -183,7 +183,7 @@ func Benchmark_checkUserName(b *testing.B) {
 	}
 	for _, tt := range tests {
 		for i := 0; i < b.N; i++ {
-			checkUserName(tt.args.username)
+			CheckUserName(tt.args.username)
 		}
 	}
 }
