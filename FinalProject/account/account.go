@@ -7,7 +7,7 @@ type Account struct {
 	UserName string                  `json:"username"`
 	Password string                  `json:"password"`
 	PinCode  string                  `json:"pincode"`
-	Wallet   wallet.MockWalletReturn `json:"account"`
+	Wallet   wallet.MockWalletReturn `json:"wallet"`
 }
 
 type Response struct {

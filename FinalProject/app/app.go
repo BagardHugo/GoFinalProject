@@ -17,7 +17,7 @@ var accountRepository *account.PostgreSqlRepository
 
 func HandleCreateAccount(w http.ResponseWriter, r *http.Request) {
 
-	db, err := sql.Open("pgx", "host=localhost port=5432 user=postgres password=password dbname=database sslmode=disable")
+	db, err := sql.Open("pgx", "host=db port=5432 user=postgres password=password dbname=database sslmode=disable")
 
 	if err != nil {
 		log.Fatal(err)

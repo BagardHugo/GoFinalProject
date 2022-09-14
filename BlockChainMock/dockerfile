@@ -1,0 +1,15 @@
+# docker build -t blockchainmock .
+# docker run -it --rm -p 5001:5001 --name blockchainmock blockchainmock
+
+FROM golang:latest
+
+WORKDIR /usr/src/BlockChainMock
+EXPOSE 5002
+
+COPY go.mod go.sum ./
+RUN go mod download && go mod verify
+
+COPY . .
+RUN go build -o /usr/local/bin/BlockChainMock
+
+CMD ["BlockChainMock"]

@@ -1,0 +1,15 @@
+# docker build -t api .
+# docker run -it --rm -p 5001:5001 --name api api
+
+FROM golang:latest
+
+WORKDIR /usr/src/Api
+EXPOSE 5001
+
+COPY go.mod go.sum ./
+RUN go mod download && go mod verify
+
+COPY . .
+RUN go build -o /usr/local/bin/Api
+
+CMD ["Api"]

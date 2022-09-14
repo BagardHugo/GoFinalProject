@@ -20,7 +20,7 @@ const (
 	PIN_CODE_FORMAT_ERROR    = "Pincode must contains 6 digits"
 
 	MOCK_SERVER_PORT    = "5002"
-	MOCK_SERVER_ADDRESS = "localhost"
+	MOCK_SERVER_ADDRESS = "mock"
 )
 
 var (
