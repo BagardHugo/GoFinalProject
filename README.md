@@ -101,5 +101,14 @@ For run unit test, execute command :
 go test -v
 ```
 
+## Benchmark
+
+For run benchmark test, execute command :
+
+```sh
+go test -bench .
+```
+
+
 ## Copyright
 No copyright for this project :)
