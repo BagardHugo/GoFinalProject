@@ -15,9 +15,9 @@ const (
 	SERIALIZE_ERROR_MESSAGE   = "Failed to serialize response"
 
 	HTTP_METHODE_NOT_ALLOWED = "Method not allowed"
-	USERNAME_FORMAT_ERROR    = "Username does not respect the naming policy"
-	PASSWORD_FORMAT_ERROR    = "Password does not respect the complexity policy"
-	PIN_CODE_FORMAT_ERROR    = "Pincode must contains 6 digits"
+	USERNAME_FORMAT_ERROR    = "Invalid username (must be a string of 0-100 characters, and only lowercase (a-z), digit (0-9) or underscore (_))"
+	PASSWORD_FORMAT_ERROR    = "Invalid password (must be a string of 6-32 characters)"
+	PIN_CODE_FORMAT_ERROR    = "Invalid pincode (must be a string of exactly 6 digits (0-9))"
 
 	MOCK_SERVER_PORT    = "5002"
 	MOCK_SERVER_ADDRESS = "mock"

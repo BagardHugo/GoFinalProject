@@ -100,6 +100,7 @@ func CreateWallet(account account.Account, w http.ResponseWriter) (wallet.MockWa
 		Blockchain: "ETH",
 	}
 
+	// Serialize external call arguments
 	data, err := json.Marshal(walletMock)
 	if err != nil {
 		SendHttpError(http.StatusInternalServerError, w, err)
