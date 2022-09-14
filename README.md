@@ -1,15 +1,49 @@
 # Go final project
 
-## Run with docker
+## Table of content
+
+1. [Getting started](#Getting-started)
+2. [Running](#Running)
+3. [End point](#End-point)
+4. [Testing](#End-point)
+5. [Copyright](#End-point)
+
+
+## Getting started
+
+### Requirement
+
+- Docker >= 20.10
+
+### Instructions
+
+Clone the repository
+
+```sh
+git clone https://github.com/BagardHugo/GoFinalProject.git
+```
+
+You  need to [install docker](https://docs.docker.com/get-docker/) first.
+Docker is available on linux and MacOs and Windows ( using Docker Desktop).
+
+## Running
+
+### Run with docker compose
 ```shell
 docker-compose up
 ```
-This command will execute all project docker file
 
-This will provide : 
- - An api exposing its endpoint to create a player and a wallet
- - A mock api to simulate the creation of a waller on a blockchain which will be called by the other api
- - A postgres database to store created users and wallets
+This command will create 3 docker container
+1. database
+2. Api
+3. Mock external Api
+
+### Stop docker compose
+If you need to stop the containers:
+
+```sh
+docker-compose down
+```
 
 ## Call endpoint
 The endpoint is exposed on the port 5001 :
@@ -24,7 +58,7 @@ Header to provide :
 Content-Type : application/json
 ```
 
-Example of body to provide :
+Example of body :
 ```json
 {
     "username" : "Hugo",
@@ -33,8 +67,8 @@ Example of body to provide :
 }
 ```
 
-## Response 
-### Success
+### Response 
+#### Success
 This endpoint will successfully respond with a body like :
 ```json
 {
@@ -51,9 +85,21 @@ This endpoint will successfully respond with a body like :
 }
 ```
 
-### Error
+#### Error
 This endpoint will respond with an error body like :
 ```json
 {
     "error": "The error message"
 }
+```
+
+## Testing
+
+For run unit test, execute command :
+
+```sh
+go test -v
+```
+
+## Copyright
+No copyright for this project :)
